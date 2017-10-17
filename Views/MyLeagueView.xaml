@@ -1,0 +1,294 @@
+﻿<UserControl x:Class="LonestarShowdown.Views.MyLeagueView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:converters="clr-namespace:LonestarShowdown.Converters"
+             MinWidth="850"
+             MinHeight="630"
+             FontFamily="Ubuntu">
+    <UserControl.Resources>
+        <Style BasedOn="{StaticResource MyDataGridStyle}" TargetType="{x:Type DataGrid}" />
+        <Style BasedOn="{StaticResource MyDataGridCellStyle}" TargetType="{x:Type DataGridCell}" />
+        <Style BasedOn="{StaticResource MyDataGridColumnHeaderStyle}" TargetType="{x:Type DataGridColumnHeader}" />
+    </UserControl.Resources>
+    <Grid Width="{Binding ActualWidth, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" Height="{Binding ActualHeight, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}">
+        <!--  Main Grid Definitions  -->
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*" />
+            <ColumnDefinition Width="1*" />
+            <ColumnDefinition Width="1*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1*" />
+            <RowDefinition Height="1.5*" />
+            <RowDefinition Height="1*" />
+            <RowDefinition Height="1*" />
+            <RowDefinition Height="1*" />
+            <RowDefinition Height="1*" />
+            <RowDefinition Height="1*" />
+        </Grid.RowDefinitions>
+
+        <!--  Standings Block  -->
+        <GroupBox Grid.RowSpan="3"
+                  Grid.Column="0"
+                  Grid.ColumnSpan="2"
+                  Style="{StaticResource GroupBox}">
+            <GroupBox.Header>
+                <StackPanel HorizontalAlignment="Center">
+                    <Label Style="{StaticResource WidgetHeader}">Standings</Label>
+                </StackPanel>
+            </GroupBox.Header>
+            <Grid>
+                <DataGrid Grid.Column="0"
+                          Margin="5"
+                          AutoGenerateColumns="False"
+                          CanUserSortColumns="False"
+                          ColumnWidth="*"
+                          ItemsSource="{Binding TeamStandings}">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Binding="{Binding PlayerId}"
+                                            Header="ID"
+                                            Visibility="Hidden" />
+                        <DataGridTextColumn Binding="{Binding Position}" Header="Pos" />
+                        <DataGridTemplateColumn Width="Auto" Header="Team">
+                            <DataGridTemplateColumn.CellStyle>
+                                <Style TargetType="FrameworkElement">
+                                    <Setter Property="HorizontalAlignment" Value="Left" />
+                                </Style>
+                            </DataGridTemplateColumn.CellStyle>
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="35" />
+                                            <ColumnDefinition Width="1*" />
+                                        </Grid.ColumnDefinitions>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="1*" />
+                                        </Grid.RowDefinitions>
+                                        <Image Grid.Column="0"
+                                               Width="24"
+                                               Height="24"
+                                               Source="{Binding TeamLogo}" />
+                                        <Label Grid.Column="1"
+                                               HorizontalAlignment="Left"
+                                               Content="{Binding TeamName}"
+                                               FontSize="{Binding FontSize,
+                                                                  RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" />
+                                    </Grid>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTextColumn Binding="{Binding GamesPlayed}" Header="Games Played" />
+                        <DataGridTextColumn Binding="{Binding GamesWon}" Header="Games Won" />
+                        <DataGridTextColumn Binding="{Binding GamesDrawn}" Header="Games Drawn" />
+                        <DataGridTextColumn Binding="{Binding GamesLost}" Header="Games Lost" />
+                        <DataGridTextColumn Binding="{Binding GoalsFor}" Header="Goals For" />
+                        <DataGridTextColumn Binding="{Binding GoalsAgainst}" Header="Goals Against" />
+                        <DataGridTextColumn Binding="{Binding GoalDifference}" Header="Goal Difference" />
+                        <DataGridTextColumn Binding="{Binding PointsTotal}" Header="Points" />
+                    </DataGrid.Columns>
+                </DataGrid>
+            </Grid>
+        </GroupBox>
+
+        <!--  Profile Summary Block  -->
+        <Border Grid.Row="0"
+                Grid.RowSpan="3"
+                Grid.Column="2"
+                Margin="7"
+                Background="White"
+                Style="{StaticResource BorderMain}" />
+        <Grid Grid.Row="0"
+              Grid.RowSpan="3"
+              Grid.Column="2"
+              Margin="4"
+              HorizontalAlignment="Stretch"
+              VerticalAlignment="Stretch">
+            <!--  Grid Definitions  -->
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*" />
+                <ColumnDefinition Width="1*" />
+                <ColumnDefinition Width="1*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="5*" />
+            </Grid.RowDefinitions>
+
+            <Grid Grid.Row="0" Grid.ColumnSpan="3">
+                <!--  Picture  -->
+                <Image Margin="10"
+                       VerticalAlignment="Stretch"
+                       Source="/Resources/Images/leaguelogo.png" />
+            </Grid>
+
+        </Grid>
+
+        <GroupBox Grid.Row="3"
+                  Grid.RowSpan="4"
+                  Grid.Column="0"
+                  Grid.ColumnSpan="2"
+                  Style="{StaticResource GroupBox}">
+            <GroupBox.Header>
+                <StackPanel HorizontalAlignment="Center">
+                    <Label Style="{StaticResource WidgetHeader}">Schedule</Label>
+                </StackPanel>
+            </GroupBox.Header>
+            <Grid>
+                <DataGrid Grid.Column="0"
+                          AutoGenerateColumns="False"
+                          ColumnWidth="*"
+                          ItemsSource="{Binding LeagueSchedule}">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Binding="{Binding Date, StringFormat=d}" Header="Date" />
+                        <DataGridTextColumn Binding="{Binding Date, StringFormat=t}" Header="Time" />
+                        <DataGridTemplateColumn Header="Home">
+                            <DataGridTemplateColumn.CellStyle>
+                                <Style TargetType="FrameworkElement">
+                                    <Setter Property="HorizontalAlignment" Value="Left" />
+                                </Style>
+                            </DataGridTemplateColumn.CellStyle>
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="35" />
+                                            <ColumnDefinition Width="1*" />
+                                        </Grid.ColumnDefinitions>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="1*" />
+                                        </Grid.RowDefinitions>
+                                        <Image Grid.Column="0"
+                                               Width="24"
+                                               Height="24"
+                                               Source="{Binding HomeTeamLogo}" />
+                                        <Label Grid.Column="1"
+                                               HorizontalAlignment="Left"
+                                               Content="{Binding HomeTeamName}"
+                                               FontSize="{Binding FontSize,
+                                                                  RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" />
+                                    </Grid>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTextColumn Binding="{Binding Score}" Header="Result" />
+                        <DataGridTemplateColumn Header="Away">
+                            <DataGridTemplateColumn.CellStyle>
+                                <Style TargetType="FrameworkElement">
+                                    <Setter Property="HorizontalAlignment" Value="Left" />
+                                </Style>
+                            </DataGridTemplateColumn.CellStyle>
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="35" />
+                                            <ColumnDefinition Width="1*" />
+                                        </Grid.ColumnDefinitions>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="1*" />
+                                        </Grid.RowDefinitions>
+                                        <Image Grid.Column="0"
+                                               Width="24"
+                                               Height="24"
+                                               Source="{Binding AwayTeamLogo}" />
+                                        <Label Grid.Column="1"
+                                               HorizontalAlignment="Left"
+                                               Content="{Binding AwayTeamName}"
+                                               FontSize="{Binding FontSize,
+                                                                  RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" />
+                                    </Grid>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </Grid>
+        </GroupBox>
+
+        <GroupBox Grid.Row="3"
+                  Grid.RowSpan="4"
+                  Grid.Column="2"
+                  Style="{StaticResource GroupBox}">
+            <GroupBox.Header>
+                <StackPanel HorizontalAlignment="Center">
+                    <Label Content="Top Player Stats" Style="{StaticResource WidgetHeader}" />
+                </StackPanel>
+            </GroupBox.Header>
+
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*" />
+                    <ColumnDefinition Width="150" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="45" />
+                    <RowDefinition Height="1*" />
+                </Grid.RowDefinitions>
+                <ComboBox Grid.Column="1"
+                          ItemsSource="{Binding StatsList}"
+                          SelectedIndex="{Binding SelectedStat,
+                                                  UpdateSourceTrigger=PropertyChanged,
+                                                  Mode=TwoWay}" />
+                <DataGrid Grid.Row="1"
+                          Grid.Column="0"
+                          Grid.ColumnSpan="2"
+                          Margin="5"
+                          AutoGenerateColumns="False"
+                          CanUserSortColumns="False"
+                          ColumnWidth="*"
+                          HorizontalScrollBarVisibility="Disabled"
+                          ItemsSource="{Binding PlayerStatsList,
+                                                UpdateSourceTrigger=PropertyChanged,
+                                                Mode=OneWay}">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Width="40"
+                                            Binding="{Binding Rank}"
+                                            Header="Rank" />
+                        <DataGridTemplateColumn Width="24" MaxWidth="24">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Image Source="{Binding ImageData}" />
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTextColumn Binding="{Binding Name}" Header="Player" />
+                        <DataGridTemplateColumn Header="Team">
+                            <DataGridTemplateColumn.CellStyle>
+                                <Style TargetType="FrameworkElement">
+                                    <Setter Property="HorizontalAlignment" Value="Left" />
+                                </Style>
+                            </DataGridTemplateColumn.CellStyle>
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="35" />
+                                            <ColumnDefinition Width="1*" />
+                                        </Grid.ColumnDefinitions>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="1*" />
+                                        </Grid.RowDefinitions>
+                                        <Image Grid.Column="0"
+                                               Width="24"
+                                               Height="24"
+                                               Source="{Binding TeamLogo}" />
+                                        <Label Grid.Column="1"
+                                               HorizontalAlignment="Left"
+                                               Content="{Binding TeamName}"
+                                               FontSize="{Binding FontSize,
+                                                                  RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" />
+                                    </Grid>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTextColumn Width="85" Binding="{Binding StatData}">
+                            <DataGridTextColumn.Header>
+                                <TextBlock Text="{Binding DataContext.StatName, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" />
+                            </DataGridTextColumn.Header>
+                        </DataGridTextColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </Grid>
+        </GroupBox>
+    </Grid>
+</UserControl>

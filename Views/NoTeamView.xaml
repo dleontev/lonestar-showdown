@@ -1,0 +1,76 @@
+﻿<UserControl x:Class="LonestarShowdown.Views.NoTeamView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:cal="http://www.caliburnproject.org"
+             xmlns:converters="clr-namespace:LonestarShowdown.Converters"
+             MinWidth="850"
+             MinHeight="630"
+             FontFamily="Ubuntu">
+    <Grid Width="{Binding ActualWidth, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" Height="{Binding ActualHeight, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1*" />
+        </Grid.RowDefinitions>
+
+        <!--  Personal Info Block  -->
+        <GroupBox Grid.RowSpan="4"
+                  Grid.Column="0"
+                  Style="{StaticResource GroupBox}">
+            <GroupBox.Header>
+                <StackPanel HorizontalAlignment="Center">
+                    <Label Style="{StaticResource WidgetHeader}">My Team</Label>
+                </StackPanel>
+            </GroupBox.Header>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <Viewbox Grid.Row="1" Margin="20">
+                    <Label 
+                       Content="{Binding NoTeamMessage}"
+                       FontSize="30"
+                       Style="{StaticResource Header}" />
+                </Viewbox>
+                <Grid Grid.Row="2" Visibility="{Binding Path=IsManager, Converter={StaticResource InverseBooleanToVisibilityConverter}}">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <Label Grid.Column="1"
+                           Grid.ColumnSpan="2"
+                           Content="Request to join a team:"
+                           Style="{StaticResource Header}" />
+                    <ComboBox Grid.Row="1"
+                              Grid.Column="1"
+                              ItemsSource="{Binding MyTeamList.Keys}"
+                              SelectedIndex="0"
+                              SelectedItem="{Binding SelectedTeam,
+                                                     UpdateSourceTrigger=PropertyChanged,
+                                                     Mode=OneWayToSource}" />
+                    <Button Grid.Row="1"
+                            Grid.Column="2"
+                            Width="250"
+                            Content="Send Request"
+                            cal:Message.Attach="[Event PreviewMouseDown] = [Action RequestTeamAction()]" />
+                </Grid>
+                <Button Grid.Row="2"
+                        Width="250"
+                        Content="Create a team"
+                        Visibility="{Binding Path=IsManager,
+                                             Converter={StaticResource BooleanToVisibilityConverter}}"
+                        cal:Message.Attach="[Event PreviewMouseDown] = [Action DisplayCreateTeamScreenAction()]" />
+            </Grid>
+        </GroupBox>
+    </Grid>
+</UserControl>
